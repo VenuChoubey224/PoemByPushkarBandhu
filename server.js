@@ -12,21 +12,21 @@ mongoose.connect('mongodb://127.0.0.1:27017/hindiPoemsDB')
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.log('MongoDB connection error:', err));
   
-  app.use(express.static(path.join(__dirname, 'public')));
+  app.use(express.static(path.join(__dirname, 'poemExpress')));
 
-  // Root route (for homepage)
+//   // Root route (for homepage)
   app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'reader' , 'reader.html'));
+    res.sendFile(path.join(__dirname, 'reader.html'));
   });
 
-  // Poet route (for poet dashboard)
+//   // Poet route (for poet dashboard)
 app.get('/poet', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'poet' , 'poet.html'));
+    res.sendFile(path.join(__dirname, 'poet.html'));
   });
   
-  // Reader route (for reader side)
+//   // Reader route (for reader side)
   app.get('/reader', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'reader' , 'reader.html'));
+    res.sendFile(path.join(__dirname , 'reader.html'));
   });
 
 // Poem Schema
