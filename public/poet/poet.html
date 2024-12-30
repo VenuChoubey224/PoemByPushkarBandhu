@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>कवि डैशबोर्ड</title>
+    <link rel="stylesheet" href="/poet/poet.css">
+</head>
+<body>
+    <header>
+        <h1>कवि डैशबोर्ड में आपका स्वागत है</h1>
+      </header>
+    <div class="container">
+        <h2>अपनी कविता अपलोड करें</h2>
+        <form id="poemForm" enctype="multipart/form-data">
+            <input type="text" id="title" name="title" placeholder="कविता का शीर्षक" required />
+            <textarea id="content" name="content" placeholder="यहां अपनी कविता लिखें..." required></textarea>
+            <input type="file" id="backgroundImage" name="backgroundImage" />
+
+      <label for="backgroundImage">पृष्ठभूमि चित्र अपलोड करें (वैकल्पिक)</label>
+      <input type="file" name="backgroundImage" />
+
+      <button type="submit">कविता सबमिट करें</button>
+            
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('poemForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+            const backgroundImage = document.getElementById('backgroundImage').files[0];
+
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('content', content);
+            if (backgroundImage) {
+              formData.append('backgroundImage', backgroundImage);
+            }
+
+            try {
+                const response = await fetch('/uploadPoem', {
+                  method: 'POST',
+                  body: formData,
+                });
+            
+                const result = await response.json();
+                alert(result.message);
+              } catch (error) {
+                console.error('Error:', error);
+                alert('कविता अपलोड करने में त्रुटि हुई।');
+              }
+            });
+    </script>
+</body>
+</html>

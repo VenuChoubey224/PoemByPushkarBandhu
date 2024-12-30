@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>हिंदी कविताएँ</title>
+    <link rel="stylesheet" href="/reader/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="left-column">
+          <img src="https://media.licdn.com/dms/image/v2/D4E03AQEHjuLbaSogjw/profile-displayphoto-shrink_200_200/B4EZPFFtoQHEAY-/0/1734178430173?e=2147483647&v=beta&t=L0YrE5zygMjQNYRwhmlLqgtulJLq3kUZMTjsDrXqe1g" alt="Author">
+          <h2>डॉ. पुष्कर बंधु</h2>
+          <p>हैदराबाद विश्वविद्यालय से पीएचडी स्कॉलर, डॉ. पुष्कर बंधु हिंदी साहित्य के गहरे प्रेमी और प्रख्यात कवि हैं। उनकी कविताएँ न केवल समाज की सच्चाई को उजागर करती हैं, बल्कि पाठकों के दिलों में गहरी छाप छोड़ती हैं।
+
+            डॉ. पुष्कर बंधु का मानना है कि कविता केवल शब्दों का मेल नहीं है, बल्कि यह समाज के अनकहे पहलुओं को व्यक्त करने का एक सशक्त माध्यम है। उनकी रचनाएँ समाज की विडंबनाओं, संघर्षों और संवेदनाओं को बड़े ही प्रभावी और संवेदनशील तरीके से प्रस्तुत करती हैं।
+            
+            उनकी कविताओं में एक अद्वितीय प्रवाह और गहराई है, जो पाठकों को सोचने और महसूस करने पर मजबूर करती है। वे इस मंच के माध्यम से अपनी कविताओं को लोगों तक पहुँचाना चाहते हैं, ताकि हिंदी साहित्य और समाज के बीच एक मजबूत सेतु का निर्माण किया जा सके।
+            
+            "कविता मेरा माध्यम है, समाज का सत्य मेरा विषय है।"</p>
+        </div>
+        <div class="right-column">
+          <div id="searchContainer">
+            <input id="searchInput" type="text" placeholder="Search for poems...">
+            <i id="searchIcon" class="fa fa-search"></i>
+            <div id="suggestions" class="hidden"></div>
+          </div>
+          <div class="poem-container" id="poemContainer"></div>
+        </div>
+      </div>
+   
+   
+      <footer>
+        <p>हिंदी कविताएँ संग्रह</p>
+      </footer>
+    <script>
+        let poems = [];
+        async function fetchPoems() {
+            const response = await fetch('/poems');
+            const poems = await response.json();
+
+            const poemContainer = document.getElementById('poemContainer');
+            poems.forEach(poem => {
+                const poemElement = document.createElement('div');
+                poemElement.classList.add('poem');
+                poemElement.style.backgroundImage = `url('${poem.backgroundImage}')`;
+                poemElement.style.backgroundSize = 'cover';
+                poemElement.style.backgroundPosition = 'center';
+                poemElement.innerHTML = `
+                    <h2>${poem.title}</h2>
+                   <pre style="background: rgba(0,0,0,0.5); color: white; padding: 10px; border-radius: 5px;">${poem.content}</pre>
+                `;
+                poemContainer.appendChild(poemElement);
+            });
+            // Render a single poem
+            function renderPoem(poem) {
+                const poemContainer = document.getElementById('poemContainer');
+                poemContainer.innerHTML = `
+                    <div class="poem" style="background-image: url('${poem.backgroundImage}');">
+                        <h2>${poem.title}</h2>
+                        <pre>${poem.content}</pre>
+                    </div>
+                `;
+            }
+
+        // Handle search input
+        function handleSearchInput(event) {
+            const query = event.target.value.toLowerCase();
+            const suggestions = document.getElementById('suggestions');
+            suggestions.innerHTML = '';
+
+            if (query) {
+                const filteredPoems = poems.filter(poem => poem.title.toLowerCase().startsWith(query));
+                filteredPoems.forEach(poem => {
+                    const suggestionItem = document.createElement('div');
+                    suggestionItem.textContent = poem.title;
+                    suggestionItem.addEventListener('click', () => {
+                        renderPoem(poem);
+                        suggestions.classList.add('hidden');
+                        document.getElementById('searchInput').value = '';
+                    });
+                    suggestions.appendChild(suggestionItem);
+                });
+
+                suggestions.classList.remove('hidden');
+            } else {
+                suggestions.classList.add('hidden');
+            }
+        }
+
+        // Initialize event listeners
+        document.getElementById('searchInput').addEventListener('input', handleSearchInput);
+
+        }
+
+        fetchPoems();
+    </script>
+</body>
+</html>
